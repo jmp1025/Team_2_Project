@@ -61,6 +61,8 @@ class Game(arcade.Window):
     def on_draw(self):
         arcade.start_render()
 
+        # more stuff here
+
         if self.game == GAME_START:
             self.draw_begin()
 
@@ -72,17 +74,7 @@ class Game(arcade.Window):
             self.draw_end(self.game)
 
         elif self.game == GAME_PLAY:
-            for asteroid in self.asteroids:
-                asteroid.draw()
-
-            for bullet in self.bullets:
-                bullet.draw()
-
-            for reload in self.reloads:
-                reload.draw()
-
-            if self.ship.alive:
-                self.ship.draw()
+            # more stuff here
 
     def update(self, delta_time):
         self.check_keys()
