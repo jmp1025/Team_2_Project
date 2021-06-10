@@ -1,6 +1,8 @@
 import arcade
 import math
 import random
+from player import Player
+from enemy import Enemy
 
 
 SCREEN_WIDTH = 1200
@@ -17,8 +19,12 @@ class Game(arcade.Window):
         super().__init__(width, height)
 
         # self.background = arcade.load_texture()
-        # self.held_keys = set()
-    self.game = GAME_START
+        self.game = GAME_START
+        self.held_keys = set()
+        # self.s_width = width
+        # self.s_height = height
+        self.player = Player()
+        self.enemy = Enemy()
 
     def new_game(self):
         """
@@ -61,33 +67,59 @@ class Game(arcade.Window):
     def on_draw(self):
         arcade.start_render()
 
-        # more stuff here
+        arcade.set_background_color(arcade.color.SKY_BLUE)
+        arcade.draw_lrtb_rectangle_filled(0, SCREEN_WIDTH, SCREEN_HEIGHT / 3, 0,
+                                          arcade.color.DARK_SPRING_GREEN)
 
         if self.game == GAME_START:
             self.draw_begin()
-
+        """
         elif not self.ship.alive:
             self.game = GAME_OVER
             self.draw_end(self.game)
         elif not self.asteroids:
             self.game = GAME_WIN
             self.draw_end(self.game)
+        """
 
-        elif self.game == GAME_PLAY:
-            # more stuff here
+        if self.game == GAME_PLAY:
+            self.player.draw()
+            self.enemy.draw()
 
-    def update(self, delta_time):
+    def on_update(self, delta_time):
         self.check_keys()
-        # if self.game == GAME_PLAY:
 
     def check_keys(self):
-        pass
+        if arcade.key.LEFT in self.held_keys:
+            self.player.move_left()
+
+        if arcade.key.RIGHT in self.held_keys:
+            self.player.move_right(self.width)
 
     def on_key_press(self, key: int, modifiers: int):
-        pass
+        """
+        Use this function to setup key control that won't be held down
+        """
+        self.held_keys.add(key)
+
+        # statement for game view conrols
+        if key == arcade.key.ENTER and self.game == GAME_START:
+            self.game = GAME_PLAY
+        elif key == arcade.key.ENTER and self.game == GAME_OVER:
+            self.new_game()
+        elif key == arcade.key.ENTER and self.game == GAME_WIN:
+            self.new_game()
+
+        #  pressing Q will end the game and close the window
+        if key == arcade.key.Q:
+            quit()
 
     def on_key_release(self, key: int, modifiers: int):
-        pass
+        """
+        Removes the current key from the set of held keys.
+        """
+        if key in self.held_keys:
+            self.held_keys.remove(key)
 
 
 window = Game(SCREEN_WIDTH, SCREEN_HEIGHT)
