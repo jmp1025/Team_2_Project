@@ -13,13 +13,11 @@ class Enemy:
 
     def __init__(self):
         super().__init__()
-        # x and y coordinates to start the player in the bottom
-        # left corner of the screen
         self.x = 1160.0  # x axis coordinate
         self.y = 40.0  # y axis coordinate
-        self.move = 2  # contorls the players speed
         self.radius = 30  # used for collision detection
         self.alive = True
+        self.challenge = False
 
     def draw(self):
         """

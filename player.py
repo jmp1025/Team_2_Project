@@ -17,7 +17,7 @@ class Player:
         # left corner of the screen
         self.x = 40.0  # x axis coordinate
         self.y = 40.0  # y axis coordinate
-        self.move = 2  # contorls the players speed
+        self.move = 6  # contorls the players speed
         self.radius = 30  # used for collision detection
         self.alive = True
 

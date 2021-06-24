@@ -3,6 +3,7 @@ import math
 import random
 from player import Player
 from enemy import Enemy
+from challenge import Challenge
 
 
 SCREEN_WIDTH = 1200
@@ -25,6 +26,7 @@ class Game(arcade.Window):
         # self.s_height = height
         self.player = Player()
         self.enemy = Enemy()
+        self.challenge = Challenge()
 
     def new_game(self):
         """
@@ -73,6 +75,9 @@ class Game(arcade.Window):
 
         if self.game == GAME_START:
             self.draw_begin()
+        if self.enemy.challenge:
+            # self.challenge.easy()
+            self.challenge.draw()
         """
         elif not self.ship.alive:
             self.game = GAME_OVER
@@ -88,6 +93,18 @@ class Game(arcade.Window):
 
     def on_update(self, delta_time):
         self.check_keys()
+        if self.game == GAME_PLAY:
+            self.check_collisions()
+
+    def check_collisions(self):
+        """
+        Use this function to check for collisions with the player image
+        """
+        if self.player.alive and self.enemy.alive:
+            too_close = self.player.radius + self.enemy.radius
+            if (abs(self.player.x - self.enemy.x) < too_close and
+                    abs(self.player.y - self.enemy.y) < too_close):
+                self.enemy.challenge = True
 
     def check_keys(self):
         if arcade.key.LEFT in self.held_keys:
