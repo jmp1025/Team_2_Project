@@ -3,30 +3,16 @@ import arcade
 
 
 class Challenge:
-    def __init__(self):
+    def __init__(self, level):
         super().__init__()
-        self.easy = int(random.uniform(1, 4))
-        self.medium = [4, 5, 6]
-        self.hard = [7, 8, 9]
-        self.multiplier = int(random.uniform(1, 10))
-        self.answer = 0
-    """
-    def easy(self):
-        self.easy = random.uniform(1, 3)
-        self.multiplier = random.uniform(1, 9)
-        self.answer = self.easy * self.multiplier
-
-    def medium(self):
-        self.medium = random.uniform(4, 6)
-        self.multiplier = random.uniform(1, 9)
-        self.answer = self.medium * self.multiplier
-
-    def hard(self):
-        self.hard = random.uniform(7, 9)
-        self.multiplier = random.uniform(1, 9)
-        self.answer = self.hard * self.multiplier
-    """
-
-    def draw(self):
-        arcade.draw_text(str(self.easy) + " * " + str(self.multiplier), 0,
-                         200, arcade.color.WHITE, 18, 200, "center")
+        self.level = level
+        self.multiplier = random.randint(0,9)
+        self.answer = self.level * self.multiplier
+        multiple_choice = [-1, -1, -1, -1]
+        multiple_choice[random.randint(0, 3)] = self.answer
+        for i in range(4):
+            if multiple_choice[i] == -1:
+                multiple_choice[i] = random.randint(0, 99)
+        print(self.multiplier)
+        print(multiple_choice)
+        

@@ -1,8 +1,16 @@
 import arcade
 import PIL
 import math
+
+from arcade import texture
 from globalVars import *
 from physicsEngine import PhysicsEngine
+from challenge import Challenge
+from background import Background
+
+# TODO: 
+# NPC diolouge: press E to interact, 3 multiple choice questions, if failed lose a life (3 lives total) and exit diolouge
+# questions are based on the value of self.level.
 
 class GameView(arcade.View):
     def __init__(self):
@@ -11,7 +19,19 @@ class GameView(arcade.View):
         set all initial conditions to null values to clear the way for a new game
         """
         self.level = -1
+        self.questions_wrong = 0
 
+        self.list_of_backgrounds = []
+        self.background1 = Background(0)
+        self.background1.texture = arcade.load_texture('Images/background.png')
+        self.list_of_backgrounds.append(self.background1)
+        self.background2 = Background(1 * BACKGROUND_WIDTH)
+        self.background2.texture = arcade.load_texture('Images/background.png')
+        self.list_of_backgrounds.append(self.background2)
+        self.background3 = Background(2 * BACKGROUND_WIDTH)
+        self.background3.texture = arcade.load_texture('Images/background.png')
+        self.list_of_backgrounds.append(self.background3)
+        
         # Sprite lists
         self.list_of_sprite_lists = []
         self.player_list = None
@@ -63,7 +83,11 @@ class GameView(arcade.View):
         """
         Render objects to the screen
         """
+
         arcade.start_render()
+
+        for background in self.list_of_backgrounds:
+            arcade.draw_texture_rectangle(background.center_x, background.center_y, 3000, 750, background.texture, 0, 255)
 
         for spriteList in self.list_of_sprite_lists:
             spriteList.draw()
@@ -96,7 +120,7 @@ class GameView(arcade.View):
         found_player = False
         for x in range(map.size[0]):
             for y in range(map.size[1]):
-                if pix[x,y] == (255, 255, 255,255):
+                if pix[x,y] == (255, 255, 255, 255):
                     # white, do nothing
                     pass
                 elif pix[x,y] == (0,0,0,255):
@@ -144,10 +168,14 @@ class GameView(arcade.View):
     def move_frame(self):
         """ move the frame based on player position """
         if self.player.center_x > 500:
+            for background in self.list_of_backgrounds:
+                background.center_x -= ((self.player.center_x - 500) / 3) / 4
             for spriteList in self.list_of_sprite_lists:
                 for sprite in spriteList.sprite_list:
                     sprite.center_x -= (self.player.center_x - 500) / 3
         elif self.player.center_x < 300:
+            for background in self.list_of_backgrounds:
+                background.center_x += (abs(self.player.center_x - 300) * math.sqrt(3)) / 4
             for spriteList in self.list_of_sprite_lists:
                 for sprite in spriteList.sprite_list:
                     sprite.center_x += abs(self.player.center_x - 300) * math.sqrt(3)
