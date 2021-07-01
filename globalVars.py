@@ -1,0 +1,11 @@
+SCREEN_WIDTH = 1300
+SCREEN_HEIGHT = 750
+SCREEN_TITLE = "Adventure in Multiplication Land (TM)"
+GRAVITY = -1
+FRICTION = 1.12
+DRAG = 1
+PLAYER_JUMP_SPEED =25
+PLAYER_MOVEMENT_SPEED = 1
+PLAYER_MAX_MOVEMENT_SPEED = 13
+
+level_templates = ['Images/map0.png']

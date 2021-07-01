@@ -15,6 +15,16 @@ GAME_OVER = 3
 GAME_WIN = 4
 
 
+
+
+
+
+
+
+
+
+
+
 class Game(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
