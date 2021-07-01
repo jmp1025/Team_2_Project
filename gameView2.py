@@ -1,5 +1,6 @@
 import arcade
 import PIL
+import math
 from globalVars import *
 from physicsEngine import PhysicsEngine
 
@@ -48,7 +49,15 @@ class GameView(arcade.View):
 
         self.createMap(level_templates[self.level])
 
-        self.physics_engine = PhysicsEngine(self.player, self.barrier_list, GRAVITY, FRICTION, DRAG, max_move_speed=PLAYER_MAX_MOVEMENT_SPEED)
+        # create a temporary list of objects the player will collide with
+        # to be passed as a parameter to the physics engine
+        temp_list = arcade.SpriteList()
+        for barrier in self.barrier_list:
+            temp_list.append(barrier)
+        for npc in self.npc_list:
+            temp_list.append(npc)
+
+        self.physics_engine = PhysicsEngine(self.player, temp_list, GRAVITY, FRICTION, DRAG, max_move_speed=PLAYER_MAX_MOVEMENT_SPEED)
 
     def on_draw(self):
         """
@@ -64,6 +73,8 @@ class GameView(arcade.View):
         """
         Update the game conditions
         """
+
+        self.move_frame()
 
         # Calculate speed based on the keys pressed
         self.player.change_x = 0
@@ -82,6 +93,7 @@ class GameView(arcade.View):
         map = PIL.Image.open(map_template)
         pix = map.load()
         # iterate through each pixel in the map image
+        found_player = False
         for x in range(map.size[0]):
             for y in range(map.size[1]):
                 if pix[x,y] == (255, 255, 255,255):
@@ -93,12 +105,19 @@ class GameView(arcade.View):
                     self.barrier.bottom = y * 75
                     self.barrier.left = x * 75
                     self.barrier_list.append(self.barrier)
-                elif pix[x,y] == (0,0,255,255):
+                elif pix[x,y] == (255,0,0,255):
+                    # red, place a npc
+                    self.npc = arcade.Sprite(':resources:images/alien/alienBlue_front.png')
+                    self.npc.bottom = y * 75
+                    self.npc.left = x * 75
+                    self.npc_list.append(self.npc)
+                elif pix[x,y] == (0,0,255,255) and not found_player:
                     # blue, place the player
                     self.player = arcade.Sprite(":resources:images/animated_characters/male_person/malePerson_idle.png")
                     self.player.bottom = y * 75
                     self.player.left = x * 75
                     self.player_list.append(self.player)
+                    found_player = True
 
     def on_key_press(self, key, modifiers):
         """ User control """
@@ -121,3 +140,14 @@ class GameView(arcade.View):
             self.left_pressed = False
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.right_pressed = False
+
+    def move_frame(self):
+        """ move the frame based on player position """
+        if self.player.center_x > 500:
+            for spriteList in self.list_of_sprite_lists:
+                for sprite in spriteList.sprite_list:
+                    sprite.center_x -= (self.player.center_x - 500) / 3
+        elif self.player.center_x < 300:
+            for spriteList in self.list_of_sprite_lists:
+                for sprite in spriteList.sprite_list:
+                    sprite.center_x += abs(self.player.center_x - 300) * math.sqrt(3)
