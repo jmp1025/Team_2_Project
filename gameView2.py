@@ -23,13 +23,13 @@ class GameView(arcade.View):
 
         self.list_of_backgrounds = []
         self.background1 = Background(0)
-        self.background1.texture = arcade.load_texture('Images/background.png')
+        self.background1.texture = arcade.load_texture('Images/background.jpg')
         self.list_of_backgrounds.append(self.background1)
         self.background2 = Background(1 * BACKGROUND_WIDTH)
-        self.background2.texture = arcade.load_texture('Images/background.png')
+        self.background2.texture = arcade.load_texture('Images/background.jpg')
         self.list_of_backgrounds.append(self.background2)
         self.background3 = Background(2 * BACKGROUND_WIDTH)
-        self.background3.texture = arcade.load_texture('Images/background.png')
+        self.background3.texture = arcade.load_texture('Images/background.jpg')
         self.list_of_backgrounds.append(self.background3)
         
         # Sprite lists
@@ -87,7 +87,7 @@ class GameView(arcade.View):
         arcade.start_render()
 
         for background in self.list_of_backgrounds:
-            arcade.draw_texture_rectangle(background.center_x, background.center_y, 3000, 750, background.texture, 0, 255)
+            arcade.draw_texture_rectangle(background.center_x, background.center_y, BACKGROUND_WIDTH, SCREEN_HEIGHT, background.texture, 0, 255)
 
         for spriteList in self.list_of_sprite_lists:
             spriteList.draw()
