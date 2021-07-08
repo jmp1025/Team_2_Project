@@ -9,4 +9,4 @@ PLAYER_MOVEMENT_SPEED = 0.8
 PLAYER_MAX_MOVEMENT_SPEED = 12
 BACKGROUND_WIDTH = 2000
 
-level_templates = ['Images/map2.png', 'Images/map1.png', 'Images/map2.png', 'Images/map3.png']
+level_templates = ['Images/map0.png', 'Images/map1.png', 'Images/map2.png', 'Images/map3.png']
