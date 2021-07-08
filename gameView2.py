@@ -1,16 +1,16 @@
 import arcade
 import PIL
 import math
-
-from arcade import texture
+from player2 import Player
 from globalVars import *
 from physicsEngine import PhysicsEngine
 from challenge import Challenge
 from background import Background
 
-# TODO: 
+# TODO:
 # NPC diolouge: press E to interact, 3 multiple choice questions, if failed lose a life (3 lives total) and exit diolouge
 # questions are based on the value of self.level.
+
 
 class GameView(arcade.View):
     def __init__(self):
@@ -31,7 +31,7 @@ class GameView(arcade.View):
         self.background3 = Background(2 * BACKGROUND_WIDTH)
         self.background3.texture = arcade.load_texture('Images/background.jpg')
         self.list_of_backgrounds.append(self.background3)
-        
+
         # Sprite lists
         self.list_of_sprite_lists = []
         self.player_list = None
@@ -47,7 +47,6 @@ class GameView(arcade.View):
         self.right_pressed = False
         self.up_pressed = False
         self.down_pressed = False
-
 
     def setup(self):
         """
@@ -67,6 +66,9 @@ class GameView(arcade.View):
         self.list_of_sprite_lists.append(self.hazard_list)
         self.list_of_sprite_lists.append(self.objective_list)
 
+        # self.player = Player()
+        # self.player_list.append(self.player)
+
         self.createMap(level_templates[self.level])
 
         # create a temporary list of objects the player will collide with
@@ -77,7 +79,8 @@ class GameView(arcade.View):
         for npc in self.npc_list:
             temp_list.append(npc)
 
-        self.physics_engine = PhysicsEngine(self.player, temp_list, GRAVITY, FRICTION, DRAG, max_move_speed=PLAYER_MAX_MOVEMENT_SPEED)
+        self.physics_engine = PhysicsEngine(
+            self.player, temp_list, GRAVITY, FRICTION, DRAG, max_move_speed=PLAYER_MAX_MOVEMENT_SPEED)
 
     def on_draw(self):
         """
@@ -87,11 +90,13 @@ class GameView(arcade.View):
         arcade.start_render()
 
         for background in self.list_of_backgrounds:
-            arcade.draw_texture_rectangle(background.center_x, background.center_y, BACKGROUND_WIDTH, SCREEN_HEIGHT, background.texture, 0, 255)
+            arcade.draw_texture_rectangle(
+                background.center_x, background.center_y, BACKGROUND_WIDTH, SCREEN_HEIGHT, background.texture, 0, 255)
 
         for spriteList in self.list_of_sprite_lists:
             spriteList.draw()
 
+        # self.player_list.draw()
 
     def on_update(self, delta_time):
         """
@@ -111,6 +116,8 @@ class GameView(arcade.View):
         elif self.right_pressed and not self.left_pressed:
             self.player.change_x = PLAYER_MOVEMENT_SPEED
 
+        # self.player_list.animate()
+
         self.physics_engine.update()
 
     def createMap(self, map_template):
@@ -120,24 +127,25 @@ class GameView(arcade.View):
         found_player = False
         for x in range(map.size[0]):
             for y in range(map.size[1]):
-                if pix[x,y] == (255, 255, 255, 255):
+                if pix[x, y] == (255, 255, 255, 255):
                     # white, do nothing
                     pass
-                elif pix[x,y] == (0,0,0,255):
+                elif pix[x, y] == (0, 0, 0, 255):
                     # black, place a barrier
                     self.barrier = arcade.Sprite('Images/platform.png')
                     self.barrier.bottom = y * 75
                     self.barrier.left = x * 75
                     self.barrier_list.append(self.barrier)
-                elif pix[x,y] == (255,0,0,255):
+                elif pix[x, y] == (255, 0, 0, 255):
                     # red, place a npc
                     self.npc = arcade.Sprite(':resources:images/alien/alienBlue_front.png')
                     self.npc.bottom = y * 75
                     self.npc.left = x * 75
                     self.npc_list.append(self.npc)
-                elif pix[x,y] == (0,0,255,255) and not found_player:
+                elif pix[x, y] == (0, 0, 255, 255) and not found_player:
                     # blue, place the player
-                    self.player = arcade.Sprite(":resources:images/animated_characters/male_person/malePerson_idle.png")
+                    # self.player = arcade.Sprite(
+                    # ":resources:images/animated_characters/male_person/malePerson_idle.png")
                     self.player.bottom = y * 75
                     self.player.left = x * 75
                     self.player_list.append(self.player)
