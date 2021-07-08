@@ -1,7 +1,8 @@
 import arcade
 
+
 class PhysicsEngine():
-    def __init__(self, entity, gravity_const, ground_friction_const, air_resistance_const=1, initial_velocity=[0,0], max_move_speed=None):
+    def __init__(self, entity, gravity_const, ground_friction_const, air_resistance_const=1, initial_velocity=[0, 0], max_move_speed=None):
         self.entity = entity
         self.gravity_const = gravity_const
         self.ground_friction_const = ground_friction_const
@@ -13,18 +14,19 @@ class PhysicsEngine():
     def update(self, walls):
         # check for floors
         self.check_for_floors(walls)
-        
-        if self.in_free_fall: # entity in free fall
-            self.velocity[0] = self.velocity[0] / self.air_resistance_const # calculate change in velocity for air resistance
-            self.velocity[1] += self.gravity_const # calculate change in velocity for gravity
-        else: # entity on ground
-            self.velocity[0] = self.velocity[0] / self.ground_friction_const # calculate friction
-            self.velocity[1] = self.entity.change_y # entity jump
+
+        if self.in_free_fall:  # entity in free fall
+            # calculate change in velocity for air resistance
+            self.velocity[0] = self.velocity[0] / self.air_resistance_const
+            self.velocity[1] += self.gravity_const  # calculate change in velocity for gravity
+        else:  # entity on ground
+            self.velocity[0] = self.velocity[0] / self.ground_friction_const  # calculate friction
+            self.velocity[1] = self.entity.change_y  # entity jump
 
         # movement in x direction
         self.velocity[0] += self.entity.change_x
-        
-        #check for walls
+
+        # check for walls
         self.check_for_walls(walls)
 
         # maximum movement speed calculation
@@ -40,7 +42,7 @@ class PhysicsEngine():
 
     def check_for_walls(self, walls):
         """ check for collisions with walls """
-        for wall in walls.sprite_list:           
+        for wall in walls.sprite_list:
             if ((self.entity.top - 10) > wall.bottom) and ((self.entity.bottom + 10) < wall.top) and ((wall.left - self.entity.right) <= 0) and ((wall.left - self.entity.right) > -60):
                 # left
                 self.entity.right = wall.left

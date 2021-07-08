@@ -9,9 +9,10 @@ from globalVars import *
 from physicsEngine import PhysicsEngine
 from background import Background
 
-# TODO: 
+# TODO:
 # NPC diolouge: press E to interact, 3 multiple choice questions, if failed lose a life (3 lives total) and exit diolouge
 # questions are based on the value of self.level.
+
 
 class GameView(arcade.View):
     def __init__(self):
@@ -38,7 +39,7 @@ class GameView(arcade.View):
         self.background3 = Background(2 * BACKGROUND_WIDTH)
         self.background3.texture = arcade.load_texture('Images/background.jpg')
         self.list_of_backgrounds.append(self.background3)
-        
+
         # Sprite lists
         self.list_of_sprite_lists = []
         self.player_list = None
@@ -58,7 +59,6 @@ class GameView(arcade.View):
         self.up_pressed = False
         self.down_pressed = False
         self.interact_pressed = False
-
 
     def setup(self):
         """
@@ -108,12 +108,19 @@ class GameView(arcade.View):
         self.list_of_sprite_lists.append(self.hazard_list)
         self.list_of_sprite_lists.append(self.objective_list)
 
+        # self.player = Player()
+        # self.player_list.append(self.player)
+
         self.createMap(level_templates[self.level])
 
         # create a temporary list of objects the player will collide with
         # to be passed as a parameter to the physics engine
 
-        self.physics_engine = PhysicsEngine(self.player, GRAVITY, FRICTION, DRAG, max_move_speed=PLAYER_MAX_MOVEMENT_SPEED)
+        self.physics_engine = PhysicsEngine(
+            self.player, temp_list, GRAVITY, FRICTION, DRAG, max_move_speed=PLAYER_MAX_MOVEMENT_SPEED)
+
+        self.physics_engine = PhysicsEngine(
+            self.player, GRAVITY, FRICTION, DRAG, max_move_speed=PLAYER_MAX_MOVEMENT_SPEED)
 
     def on_draw(self):
         """
@@ -123,18 +130,26 @@ class GameView(arcade.View):
         arcade.start_render()
 
         for background in self.list_of_backgrounds:
-            arcade.draw_texture_rectangle(background.center_x, background.center_y, BACKGROUND_WIDTH, SCREEN_HEIGHT, background.texture, 0, 255)
+            arcade.draw_texture_rectangle(
+                background.center_x, background.center_y, BACKGROUND_WIDTH, SCREEN_HEIGHT, background.texture, 0, 255)
 
         for spriteList in self.list_of_sprite_lists:
             spriteList.draw()
 
+        # self.player_list.draw()
+
         if self.in_diolouge:
             arcade.draw_texture_rectangle(1000, 300, 400, 500, self.diolouge_box_texture)
-            arcade.draw_text(f'{self.diolouge.multiplier} x {self.level}', 1000, 475, arcade.color.BLACK, 35)
-            arcade.draw_text(str(self.diolouge.multiple_choice[0]), 1000, 400, arcade.color.BLACK, 35, width=45, align="center", anchor_x="center", anchor_y="center")
-            arcade.draw_text(str(self.diolouge.multiple_choice[1]), 1150, 250, arcade.color.BLACK, 35, width=45, align="center", anchor_x="center", anchor_y="center")
-            arcade.draw_text(str(self.diolouge.multiple_choice[2]), 1000, 100, arcade.color.BLACK, 35, width=45, align="center", anchor_x="center", anchor_y="center")
-            arcade.draw_text(str(self.diolouge.multiple_choice[3]), 850, 250, arcade.color.BLACK, 35, width=45, align="center", anchor_x="center", anchor_y="center")
+            arcade.draw_text(f'{self.diolouge.multiplier} x {self.level}',
+                             1000, 475, arcade.color.BLACK, 35)
+            arcade.draw_text(str(self.diolouge.multiple_choice[0]), 1000, 400, arcade.color.BLACK,
+                             35, width=45, align="center", anchor_x="center", anchor_y="center")
+            arcade.draw_text(str(self.diolouge.multiple_choice[1]), 1150, 250, arcade.color.BLACK,
+                             35, width=45, align="center", anchor_x="center", anchor_y="center")
+            arcade.draw_text(str(self.diolouge.multiple_choice[2]), 1000, 100, arcade.color.BLACK,
+                             35, width=45, align="center", anchor_x="center", anchor_y="center")
+            arcade.draw_text(str(self.diolouge.multiple_choice[3]), 850, 250, arcade.color.BLACK,
+                             35, width=45, align="center", anchor_x="center", anchor_y="center")
 
         arcade.draw_text(f'Lives: {self.lives}', 10, 680, arcade.color.DARK_RED, 35)
 
@@ -151,8 +166,6 @@ class GameView(arcade.View):
 
         if self.show_level:
             arcade.draw_text(f'Level {self.level}', 350, 400, arcade.color.BLACK, 90)
-        
-
 
     def on_update(self, delta_time):
         """
@@ -199,7 +212,8 @@ class GameView(arcade.View):
             shortest_distance = 99999999
             shortest_distance_npc = None
             for npc in self.npc_list:
-                current_distance = math.sqrt((self.player.center_x - npc.center_x)**2 + (self.player.center_y - npc.center_y)**2)
+                current_distance = math.sqrt(
+                    (self.player.center_x - npc.center_x)**2 + (self.player.center_y - npc.center_y)**2)
                 if current_distance < shortest_distance:
                     shortest_distance = current_distance
                     shortest_distance_npc = npc
@@ -225,6 +239,10 @@ class GameView(arcade.View):
         if self.player.center_y < 10:
             self.lives = 0
 
+        # self.player_list.animate()
+
+        self.physics_engine.update()
+
         if self.lives < 1:
             self.level = self.level - 1
             self.setup()
@@ -245,31 +263,36 @@ class GameView(arcade.View):
         found_player = False
         for x in range(map.size[0]):
             for y in range(map.size[1]):
-                if pix[x,y] == (255, 255, 255, 255):
+                if pix[x, y] == (255, 255, 255, 255):
                     # white, do nothing
                     pass
-                elif pix[x,y] == (0,0,0,255):
+                elif pix[x, y] == (0, 0, 0, 255):
                     # black, place a barrier
                     self.barrier = arcade.Sprite('Images/platform.png')
                     self.barrier.bottom = y * 75
                     self.barrier.left = x * 75
                     self.barrier_list.append(self.barrier)
+
+                elif pix[x, y] == (255, 0, 0, 255):
+
                     self.wall_list.append(self.barrier)
-                elif pix[x,y] == (255,0,0,255):
+                elif pix[x, y] == (255, 0, 0, 255):
+
                     # red, place a npc
                     self.npc = arcade.Sprite(':resources:images/alien/alienBlue_front.png')
                     self.npc.bottom = y * 75
                     self.npc.left = x * 75
                     self.npc_list.append(self.npc)
                     self.barrier_list.append(self.npc)
-                elif pix[x,y] == (0,0,255,255) and not found_player:
+                elif pix[x, y] == (0, 0, 255, 255) and not found_player:
                     # blue, place the player
-                    self.player = arcade.Sprite(":resources:images/animated_characters/male_person/malePerson_idle.png")
+                    # self.player = arcade.Sprite(
+                    # ":resources:images/animated_characters/male_person/malePerson_idle.png")
                     self.player.bottom = y * 75
                     self.player.left = x * 75
                     self.player_list.append(self.player)
                     found_player = True
-                elif pix[x,y] == (0,255,0,255):
+                elif pix[x, y] == (0, 255, 0, 255):
                     # green, place the objective
                     self.objective = arcade.Sprite("Images/objective.png")
                     self.objective.bottom = y * 75
@@ -320,27 +343,36 @@ class GameView(arcade.View):
 
 class VictoryView(arcade.View):
     """ Class for the victory menu view """
+
     def __init__(self):
         super().__init__()
         self.texture = arcade.load_texture('Images/victory.png')
+
     def on_show(self):
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+
     def on_draw(self):
         self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT)
+
     def on_mouse_press(self, x, y, btn, mod):
         start_menu = StartMenuView()
         self.window.show_view(start_menu)
 
+
 class StartMenuView(arcade.View):
     """ Class for the main menu view """
+
     def __init__(self):
         super().__init__()
         self.texture = arcade.load_texture('Images/title.png')
         self.mouse_pressed = False
+
     def on_show(self):
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+
     def on_draw(self):
         self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT)
+
     def on_mouse_press(self, x, y, btn, mod):
         if self.mouse_pressed:
             game_view = GameView()
@@ -349,6 +381,7 @@ class StartMenuView(arcade.View):
         else:
             self.texture = arcade.load_texture('Images/tutorial.png')
             self.mouse_pressed = True
+
     def on_key_release(self, key, mods):
         if key == arcade.key.L:
             user_input = arcade.gui.UIInputBox(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 400, 300)
