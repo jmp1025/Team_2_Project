@@ -2,6 +2,7 @@ import arcade
 from gameView2 import StartMenuView
 from globalVars import *
 
+
 def main():
     """ Main method """
 
