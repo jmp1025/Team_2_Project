@@ -48,10 +48,6 @@ class Player(arcade.Sprite):
             self.texture = self.fall[self.direction]
             return
 
-        if self.change_x == 0 and self.change_y == 0:
-            self.texture = self.idle[self.direction]
-            return
-
         if self.change_x == 0:
             self.texture = self.idle[self.direction]
             return

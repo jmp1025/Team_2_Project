@@ -51,6 +51,10 @@ class GameView(arcade.View):
         self.player = None
         self.objective = None
 
+        # For background music
+        self.music_player = None
+        self.music = None
+
         # Textures
         self.diolouge_box_texture = arcade.load_texture(f"{PYGUYS}text_box.png")
 
@@ -60,6 +64,8 @@ class GameView(arcade.View):
         self.up_pressed = False
         self.down_pressed = False
         self.interact_pressed = False
+
+        self.playSong()
 
     def setup(self):
         """
@@ -111,9 +117,6 @@ class GameView(arcade.View):
 
         self.createMap(LEVEL_TEMPLATES[self.level])
 
-        # create a temporary list of objects the player will collide with
-        # to be passed as a parameter to the physics engine
-
         self.physics_engine = PhysicsEngine(
             self.player, GRAVITY, FRICTION, DRAG, max_move_speed=PLAYER_MAX_MOVEMENT_SPEED)
 
@@ -164,6 +167,9 @@ class GameView(arcade.View):
         """
         Update the game conditions
         """
+        song_position = self.music.get_stream_position(self.music_player)
+        if song_position == 0.0:
+            self.playSong()
 
         self.move_frame()
 
@@ -184,6 +190,7 @@ class GameView(arcade.View):
                 selection = 3
             if selection == self.diolouge.correct_index:
                 self.show_correct = True
+                arcade.play_sound(SOUND_CORRECT)
                 self.on_draw()
                 arcade.finish_render()
                 time.sleep(1.3)
@@ -194,6 +201,7 @@ class GameView(arcade.View):
             elif selection != None:
                 self.lives -= 1
                 self.show_incorrect = True
+                arcade.play_sound(SOUND_ERROR)
                 self.on_draw()
                 arcade.finish_render()
                 time.sleep(1.3)
@@ -234,6 +242,7 @@ class GameView(arcade.View):
 
         if self.lives < 1:
             self.level = self.level - 1
+            arcade.play_sound(SOUND_NO_LIVES)
             self.setup()
 
         if math.sqrt((self.player.center_x - self.objective.center_x)**2 + (self.player.center_y - self.objective.center_y)**2) < 100:
@@ -241,10 +250,19 @@ class GameView(arcade.View):
                 victory = VictoryView()
                 self.window.show_view(victory)
             else:
+                arcade.play_sound(WIN_LEVEL)
                 self.setup()
 
         self.physics_engine.update(self.barrier_list)
         self.player.animate()
+
+    def playSong(self):
+        """ Play background music """
+        if self.music:
+            self.music.stop(self.music_player)
+        self.music = arcade.Sound(":resources:music/funkyrobot.mp3", streaming=True)
+        self.music_player = self.music.play(MUSIC_VOLUME)
+        time.sleep(0.03)
 
     def createMap(self, map_template):
         map = PIL.Image.open(map_template)
@@ -265,7 +283,8 @@ class GameView(arcade.View):
                     self.wall_list.append(self.barrier)
                 elif pix[x, y] == (255, 0, 0, 255):
                     # red, place a npc
-                    self.npc = arcade.Sprite(':resources:images/alien/alienBlue_front.png')
+                    self.npc = arcade.Sprite(
+                        ':resources:images/animated_characters/robot/robot_idle.png')
                     self.npc.bottom = y * 75
                     self.npc.left = x * 75
                     self.npc_list.append(self.npc)
