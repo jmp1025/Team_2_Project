@@ -1,65 +1,60 @@
 import arcade
+from globalVars import *
 
 # img original dimensions: 131 x 188
 # new dimensions maintain aspect ratio
-IMG_WIDTH = 40
-IMG_HEIGHT = 57
 
 
-class Player:
+def load_texture_pair(filename):
+    return [
+        arcade.load_texture(filename),
+        arcade.load_texture(filename, flipped_horizontally=True)
+    ]
+
+
+class Player(arcade.Sprite):
     """
     used for creating player object
     """
 
     def __init__(self):
         super().__init__()
-        # x and y coordinates to start the player in the bottom
-        # left corner of the screen
-        self.x = 40.0  # x axis coordinate
-        self.y = 40.0  # y axis coordinate
-        self.move = 6  # contorls the players speed
-        self.radius = 30  # used for collision detection
-        self.alive = True
+        self.direction = PLAYER_FACE_RIGHT
+        self.current_texture = 0
+        self.scale = PLAYER_SCALE
+        self.jumping = False
+        path = ":resources:images/animated_characters/male_person/malePerson"
+        self.idle = load_texture_pair(f"{path}_idle.png")
+        self.walk = []
+        for i in range(8):
+            texture = load_texture_pair(f"{path}_walk{i}.png")
+            self.walk.append(texture)
+        self.jump = load_texture_pair(f"{path}_jump.png")
+        self.fall = load_texture_pair(f"{path}_fall.png")
 
-    def draw(self):
-        """
-        draws the player image to the screen
-        """
-        img = ":resources:images/animated_characters/male_person/malePerson_idle.png"
-        texture = arcade.load_texture(img)
+        self.texture = self.idle[0]
+        self.set_hit_box(self.texture.hit_box_points)
 
-        # img original dimensions: 131 x 188
-        arcade.draw_texture_rectangle(self.x, self.y, IMG_WIDTH,
-                                      IMG_HEIGHT, texture, 0, 255)
+    def animate(self, delta_time: float = 1/60):
+        if self.change_x < 0 and self.direction == PLAYER_FACE_RIGHT:
+            self.direction = PLAYER_FACE_LEFT
+        elif self.change_x > 0 and self.direction == PLAYER_FACE_LEFT:
+            self.direction = PLAYER_FACE_RIGHT
 
-    def move_up(self, s_height):
-        """
-        controls upward movement by manipulating the y-coordinate
-        will not allow player to go off screen
-        """
-        if self.y < s_height - (IMG_HEIGHT / 2):
-            self.y += self.move
+        if self.change_y > 0:
+            self.texture = self.jump[self.direction]
+            return
+        elif self.change_y < 0:
+            self.texture = self.fall[self.direction]
+            return
 
-    def move_down(self):
-        """
-        controls downward movement by manipulating the y-coordinate
-        will not allow player to go off screen
-        """
-        if self.y > IMG_HEIGHT / 2:
-            self.y -= self.move
+        if self.change_x == 0 and self.change_y == 0:
+            self.texture = self.idle[self.direction]
+            return
 
-    def move_left(self):
-        """
-        controls leftward movement by manipulating the x-coordinate
-        will not allow player to go off screen
-        """
-        if self.x > IMG_HEIGHT / 2:
-            self.x -= self.move
-
-    def move_right(self, s_width):
-        """
-        controls rightward movement by manipulating the x-coordinate
-        will not allow player to go off screen
-        """
-        if self.x < s_width - (IMG_HEIGHT / 2):
-            self.x += self.move
+        self.current_texture += 1
+        if self.current_texture > 7 * PLAYER_UPDATE:
+            self.current_texture = 0
+        frame = int(self.current_texture // PLAYER_UPDATE)
+        direction = self.direction
+        self.texture = self.walk[frame][direction]

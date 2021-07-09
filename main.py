@@ -1,5 +1,5 @@
 import arcade
-from gameView2 import StartMenuView
+from gameView import StartMenuView
 from globalVars import *
 
 

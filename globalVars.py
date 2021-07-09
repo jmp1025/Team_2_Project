@@ -13,4 +13,15 @@ PLAYER_UPDATE = 0.8
 PLAYER_SCALE = 1
 BACKGROUND_WIDTH = 2000
 
+<<<<<<< Updated upstream
 level_templates = ['Images/map0.png', 'Images/map1.png', 'Images/map2.png', 'Images/map3.png']
+=======
+LEVEL_TEMPLATES = ['Images/map0.png', 'Images/map1.png', 'Images/map2.png', 'Images/map3.png']
+
+SOUND_ERROR = arcade.load_sound(":resources:sounds/error5.wav")
+SOUND_CORRECT = arcade.load_sound(":resources:sounds/coin1.wav")
+SOUND_NO_LIVES = arcade.load_sound(":resources:sounds/gameover2.wav")
+WIN_LEVEL = arcade.load_sound(":resources:sounds/secret4.wav")
+GAME_VICTORY = arcade.load_sound(":resources:sounds/upgrade5.wav")
+MUSIC_VOLUME = 0.5
+>>>>>>> Stashed changes
