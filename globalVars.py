@@ -1,6 +1,7 @@
 SCREEN_WIDTH = 1300
 SCREEN_HEIGHT = 750
 SCREEN_TITLE = "Adventure in Multiplication Land (TM)"
+PYGUYS = ":resources:images/pyGuys/"
 GRAVITY = -1
 FRICTION = 1.1
 DRAG = 1.023
@@ -13,4 +14,6 @@ PLAYER_UPDATE = 0.8
 PLAYER_SCALE = 1
 BACKGROUND_WIDTH = 2000
 
-level_templates = ['Images/map0.png', 'Images/map1.png', 'Images/map2.png', 'Images/map3.png']
+LEVEL_TEMPLATES = ['C:/Users/jmp10/Documents/GitHub/Team_2_Project/Images/map2.png', 'C:/Users/jmp10/Documents/GitHub/Team_2_Project/Images/map1.png',
+                   'C:/Users/jmp10/Documents/GitHub/Team_2_Project/Images/map2.png', 'C:/Users/jmp10/Documents/GitHub/Team_2_Project/I
+                   mages/map3.png']

@@ -8,6 +8,8 @@ from arcade.key import F
 from globalVars import *
 from physicsEngine import PhysicsEngine
 from background import Background
+from player2 import Player
+
 
 # TODO:
 # NPC diolouge: press E to interact, 3 multiple choice questions, if failed lose a life (3 lives total) and exit diolouge
@@ -31,13 +33,13 @@ class GameView(arcade.View):
 
         self.list_of_backgrounds = []
         self.background1 = Background(0)
-        self.background1.texture = arcade.load_texture('Images/background.jpg')
+        self.background1.texture = arcade.load_texture(f"{PYGUYS}background.jpg")
         self.list_of_backgrounds.append(self.background1)
         self.background2 = Background(1 * BACKGROUND_WIDTH)
-        self.background2.texture = arcade.load_texture('Images/background.jpg')
+        self.background2.texture = arcade.load_texture(f"{PYGUYS}background.jpg")
         self.list_of_backgrounds.append(self.background2)
         self.background3 = Background(2 * BACKGROUND_WIDTH)
-        self.background3.texture = arcade.load_texture('Images/background.jpg')
+        self.background3.texture = arcade.load_texture(f"{PYGUYS}background.jpg")
         self.list_of_backgrounds.append(self.background3)
 
         # Sprite lists
@@ -51,7 +53,7 @@ class GameView(arcade.View):
         self.objective = None
 
         # Textures
-        self.diolouge_box_texture = arcade.load_texture('Images/text_box.png')
+        self.diolouge_box_texture = arcade.load_texture(f"{PYGUYS}text_box.png")
 
         # Keyboard keys
         self.left_pressed = False
@@ -86,13 +88,13 @@ class GameView(arcade.View):
 
         self.list_of_backgrounds = []
         self.background1 = Background(0)
-        self.background1.texture = arcade.load_texture('Images/background.jpg')
+        self.background1.texture = arcade.load_texture(f"{PYGUYS}background.jpg")
         self.list_of_backgrounds.append(self.background1)
         self.background2 = Background(1 * BACKGROUND_WIDTH)
-        self.background2.texture = arcade.load_texture('Images/background.jpg')
+        self.background2.texture = arcade.load_texture(f"{PYGUYS}background.jpg")
         self.list_of_backgrounds.append(self.background2)
         self.background3 = Background(2 * BACKGROUND_WIDTH)
-        self.background3.texture = arcade.load_texture('Images/background.jpg')
+        self.background3.texture = arcade.load_texture(f"{PYGUYS}background.jpg")
         self.list_of_backgrounds.append(self.background3)
 
         # Initialize the sprite lists and add them to the list of sprite lists
@@ -102,22 +104,19 @@ class GameView(arcade.View):
         self.npc_list = arcade.SpriteList()
         self.hazard_list = arcade.SpriteList()
         self.objective_list = arcade.SpriteList()
-        self.list_of_sprite_lists.append(self.player_list)
+        # self.list_of_sprite_lists.append(self.player_list)
         self.list_of_sprite_lists.append(self.wall_list)
         self.list_of_sprite_lists.append(self.npc_list)
         self.list_of_sprite_lists.append(self.hazard_list)
         self.list_of_sprite_lists.append(self.objective_list)
 
+        self.createMap(LEVEL_TEMPLATES[self.level])
+
         # self.player = Player()
         # self.player_list.append(self.player)
 
-        self.createMap(level_templates[self.level])
-
         # create a temporary list of objects the player will collide with
         # to be passed as a parameter to the physics engine
-
-        self.physics_engine = PhysicsEngine(
-            self.player, temp_list, GRAVITY, FRICTION, DRAG, max_move_speed=PLAYER_MAX_MOVEMENT_SPEED)
 
         self.physics_engine = PhysicsEngine(
             self.player, GRAVITY, FRICTION, DRAG, max_move_speed=PLAYER_MAX_MOVEMENT_SPEED)
@@ -136,7 +135,7 @@ class GameView(arcade.View):
         for spriteList in self.list_of_sprite_lists:
             spriteList.draw()
 
-        # self.player_list.draw()
+        self.player_list.draw()
 
         if self.in_diolouge:
             arcade.draw_texture_rectangle(1000, 300, 400, 500, self.diolouge_box_texture)
@@ -239,7 +238,7 @@ class GameView(arcade.View):
         if self.player.center_y < 10:
             self.lives = 0
 
-        # self.player_list.animate()
+        self.player_list.animate()
 
         self.physics_engine.update()
 
@@ -248,7 +247,7 @@ class GameView(arcade.View):
             self.setup()
 
         if math.sqrt((self.player.center_x - self.objective.center_x)**2 + (self.player.center_y - self.objective.center_y)**2) < 100:
-            if len(level_templates) - 1 <= self.level:
+            if len(LEVEL_TEMPLATES) - 1 <= self.level:
                 victory = VictoryView()
                 self.window.show_view(victory)
             else:
@@ -268,7 +267,7 @@ class GameView(arcade.View):
                     pass
                 elif pix[x, y] == (0, 0, 0, 255):
                     # black, place a barrier
-                    self.barrier = arcade.Sprite('Images/platform.png')
+                    self.barrier = arcade.Sprite(f"{PYGUYS}platform.png")
                     self.barrier.bottom = y * 75
                     self.barrier.left = x * 75
                     self.barrier_list.append(self.barrier)
@@ -286,15 +285,14 @@ class GameView(arcade.View):
                     self.barrier_list.append(self.npc)
                 elif pix[x, y] == (0, 0, 255, 255) and not found_player:
                     # blue, place the player
-                    # self.player = arcade.Sprite(
-                    # ":resources:images/animated_characters/male_person/malePerson_idle.png")
+                    self.player = Player()
                     self.player.bottom = y * 75
                     self.player.left = x * 75
                     self.player_list.append(self.player)
                     found_player = True
                 elif pix[x, y] == (0, 255, 0, 255):
                     # green, place the objective
-                    self.objective = arcade.Sprite("Images/objective.png")
+                    self.objective = arcade.Sprite(f"{PYGUYS}objective.png")
                     self.objective.bottom = y * 75
                     self.objective.left = x * 75
                     self.objective_list.append(self.objective)
@@ -346,7 +344,7 @@ class VictoryView(arcade.View):
 
     def __init__(self):
         super().__init__()
-        self.texture = arcade.load_texture('Images/victory.png')
+        self.texture = arcade.load_texture(f"{PYGUYS}victory.png")
 
     def on_show(self):
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
@@ -364,7 +362,7 @@ class StartMenuView(arcade.View):
 
     def __init__(self):
         super().__init__()
-        self.texture = arcade.load_texture('Images/title.png')
+        self.texture = arcade.load_texture(f"{PYGUYS}title.png")
         self.mouse_pressed = False
 
     def on_show(self):
@@ -379,7 +377,7 @@ class StartMenuView(arcade.View):
             game_view.setup()
             self.window.show_view(game_view)
         else:
-            self.texture = arcade.load_texture('Images/tutorial.png')
+            self.texture = arcade.load_texture(f"{PYGUYS}tutorial.png")
             self.mouse_pressed = True
 
     def on_key_release(self, key, mods):
