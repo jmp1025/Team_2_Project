@@ -10,7 +10,6 @@ from physicsEngine import PhysicsEngine
 from background import Background
 from player2 import Player
 
-
 # TODO:
 # NPC diolouge: press E to interact, 3 multiple choice questions, if failed lose a life (3 lives total) and exit diolouge
 # questions are based on the value of self.level.
@@ -104,16 +103,13 @@ class GameView(arcade.View):
         self.npc_list = arcade.SpriteList()
         self.hazard_list = arcade.SpriteList()
         self.objective_list = arcade.SpriteList()
-        # self.list_of_sprite_lists.append(self.player_list)
+        self.list_of_sprite_lists.append(self.player_list)
         self.list_of_sprite_lists.append(self.wall_list)
         self.list_of_sprite_lists.append(self.npc_list)
         self.list_of_sprite_lists.append(self.hazard_list)
         self.list_of_sprite_lists.append(self.objective_list)
 
         self.createMap(LEVEL_TEMPLATES[self.level])
-
-        # self.player = Player()
-        # self.player_list.append(self.player)
 
         # create a temporary list of objects the player will collide with
         # to be passed as a parameter to the physics engine
@@ -134,8 +130,6 @@ class GameView(arcade.View):
 
         for spriteList in self.list_of_sprite_lists:
             spriteList.draw()
-
-        self.player_list.draw()
 
         if self.in_diolouge:
             arcade.draw_texture_rectangle(1000, 300, 400, 500, self.diolouge_box_texture)
@@ -238,10 +232,6 @@ class GameView(arcade.View):
         if self.player.center_y < 10:
             self.lives = 0
 
-        self.player_list.animate()
-
-        self.physics_engine.update()
-
         if self.lives < 1:
             self.level = self.level - 1
             self.setup()
@@ -254,6 +244,7 @@ class GameView(arcade.View):
                 self.setup()
 
         self.physics_engine.update(self.barrier_list)
+        self.player.animate()
 
     def createMap(self, map_template):
         map = PIL.Image.open(map_template)
@@ -271,12 +262,8 @@ class GameView(arcade.View):
                     self.barrier.bottom = y * 75
                     self.barrier.left = x * 75
                     self.barrier_list.append(self.barrier)
-
-                elif pix[x, y] == (255, 0, 0, 255):
-
                     self.wall_list.append(self.barrier)
                 elif pix[x, y] == (255, 0, 0, 255):
-
                     # red, place a npc
                     self.npc = arcade.Sprite(':resources:images/alien/alienBlue_front.png')
                     self.npc.bottom = y * 75

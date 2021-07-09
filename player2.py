@@ -8,7 +8,7 @@ from globalVars import *
 def load_texture_pair(filename):
     return [
         arcade.load_texture(filename),
-        arcade.load_texture(filename)
+        arcade.load_texture(filename, flipped_horizontally=True)
     ]
 
 
@@ -59,6 +59,6 @@ class Player(arcade.Sprite):
         self.current_texture += 1
         if self.current_texture > 7 * PLAYER_UPDATE:
             self.current_texture = 0
-        frame = self.current_texture // PLAYER_UPDATE
+        frame = int(self.current_texture // PLAYER_UPDATE)
         direction = self.direction
         self.texture = self.walk[frame][direction]

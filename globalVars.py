@@ -14,6 +14,5 @@ PLAYER_UPDATE = 0.8
 PLAYER_SCALE = 1
 BACKGROUND_WIDTH = 2000
 
-LEVEL_TEMPLATES = ['C:/Users/jmp10/Documents/GitHub/Team_2_Project/Images/map2.png', 'C:/Users/jmp10/Documents/GitHub/Team_2_Project/Images/map1.png',
-                   'C:/Users/jmp10/Documents/GitHub/Team_2_Project/Images/map2.png', 'C:/Users/jmp10/Documents/GitHub/Team_2_Project/I
-                   mages/map3.png']
+LEVEL_TEMPLATES = ['C:/Users/jmp10/Documents/GitHub/Team_2_Project/Images/map0.png', 'C:/Users/jmp10/Documents/GitHub/Team_2_Project/Images/map1.png',
+                   'C:/Users/jmp10/Documents/GitHub/Team_2_Project/Images/map2.png', 'C:/Users/jmp10/Documents/GitHub/Team_2_Project/Images/map3.png']
