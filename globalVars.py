@@ -15,11 +15,22 @@ PLAYER_UPDATE = 0.8
 PLAYER_SCALE = 1
 BACKGROUND_WIDTH = 2000
 
+<<<<<<< Updated upstream
 LEVEL_TEMPLATES = ['Images/map0.png', 'Images/map1.png', 'Images/map2.png', 'Images/map3.png']
+=======
+PATH = "C:/Users/jmp10/Documents/GitHub/Team_2_Project/"
+
+LEVEL_TEMPLATES = ['Images/map0.png', 'Images/map1.png',
+                   'Images/map2.png', 'Images/map3.png']
+>>>>>>> Stashed changes
 
 SOUND_ERROR = arcade.load_sound(":resources:sounds/error5.wav")
 SOUND_CORRECT = arcade.load_sound(":resources:sounds/coin1.wav")
 SOUND_NO_LIVES = arcade.load_sound(":resources:sounds/gameover2.wav")
 WIN_LEVEL = arcade.load_sound(":resources:sounds/secret4.wav")
+<<<<<<< Updated upstream
 GAME_VICTORY = arcade.load_sound(":resources:sounds/upgrade5.wav")
+=======
+GAME_VICTORY = arcade.load_sound('Audio/Victory_Fanfare.mp3')
+>>>>>>> Stashed changes
 MUSIC_VOLUME = 0.5

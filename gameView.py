@@ -259,7 +259,8 @@ class GameView(arcade.View):
         self.counter += 1
         if self.counter == 60:
             self.counter = 0
-        self.player.animate(self.physics_engine.in_free_fall, self.physics_engine.velocity[1], self.physics_engine.velocity[0], self.counter)
+        self.player.animate(self.physics_engine.in_free_fall,
+                            self.physics_engine.velocity[1], self.physics_engine.velocity[0], self.counter)
 
     def playSong(self):
         """ Play background music """
@@ -355,7 +356,7 @@ class VictoryView(arcade.View):
 
     def __init__(self):
         super().__init__()
-        self.texture = arcade.load_texture("Images/victory.png")
+        self.texture = arcade.load_texture("Images/Game_Victory.png")
 
     def on_show(self):
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
@@ -373,7 +374,7 @@ class StartMenuView(arcade.View):
 
     def __init__(self):
         super().__init__()
-        self.texture = arcade.load_texture("Images/title.png")
+        self.texture = arcade.load_texture("Images/Game_Title.png")
         self.mouse_pressed = False
 
     def on_show(self):
@@ -388,7 +389,7 @@ class StartMenuView(arcade.View):
             game_view.setup()
             self.window.show_view(game_view)
         else:
-            self.texture = arcade.load_texture("Images/tutorial.png")
+            self.texture = arcade.load_texture("Images/Game_Tutorial.png")
             self.mouse_pressed = True
 
     def on_key_release(self, key, mods):
