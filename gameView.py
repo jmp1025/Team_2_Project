@@ -34,13 +34,13 @@ class GameView(arcade.View):
 
         self.list_of_backgrounds = []
         self.background1 = Background(0)
-        self.background1.texture = arcade.load_texture("Images/Game_Background.png")
+        self.background1.texture = arcade.load_texture(f"{PATH}Images/Game_Background.png")
         self.list_of_backgrounds.append(self.background1)
         self.background2 = Background(1 * BACKGROUND_WIDTH)
-        self.background2.texture = arcade.load_texture("Images/Game_Background_Flipped.png")
+        self.background2.texture = arcade.load_texture(f"{PATH}Images/Game_Background_Flipped.png")
         self.list_of_backgrounds.append(self.background2)
         self.background3 = Background(2 * BACKGROUND_WIDTH)
-        self.background3.texture = arcade.load_texture("Images/Game_Background.png")
+        self.background3.texture = arcade.load_texture(f"{PATH}Images/Game_Background.png")
         self.list_of_backgrounds.append(self.background3)
 
         # Sprite lists
@@ -58,7 +58,7 @@ class GameView(arcade.View):
         self.music = None
 
         # Textures
-        self.diolouge_box_texture = arcade.load_texture("Images/text_box.png")
+        self.diolouge_box_texture = arcade.load_texture(f"{PATH}Images/text_box.png")
 
         # Keyboard keys
         self.left_pressed = False
@@ -95,13 +95,13 @@ class GameView(arcade.View):
 
         self.list_of_backgrounds = []
         self.background1 = Background(0)
-        self.background1.texture = arcade.load_texture("Images/Game_Background.png")
+        self.background1.texture = arcade.load_texture(f"{PATH}Images/Game_Background.png")
         self.list_of_backgrounds.append(self.background1)
         self.background2 = Background(1 * BACKGROUND_WIDTH)
-        self.background2.texture = arcade.load_texture("Images/Game_Background_Flipped.png")
+        self.background2.texture = arcade.load_texture(f"{PATH}Images/Game_Background_Flipped.png")
         self.list_of_backgrounds.append(self.background2)
         self.background3 = Background(2 * BACKGROUND_WIDTH)
-        self.background3.texture = arcade.load_texture("Images/Game_Background.png")
+        self.background3.texture = arcade.load_texture(f"{PATH}Images/Game_Background.png")
         self.list_of_backgrounds.append(self.background3)
 
         # Initialize the sprite lists and add them to the list of sprite lists
@@ -163,7 +163,7 @@ class GameView(arcade.View):
             self.show_incorrect = False
 
         if self.show_level:
-            arcade.draw_text(f'Level {self.level}', 350, 400, arcade.color.BLACK, 90)
+            arcade.draw_text(f'Level {self.level+1}', 350, 400, arcade.color.BLACK, 90)
 
     def on_update(self, delta_time):
         """
@@ -250,6 +250,8 @@ class GameView(arcade.View):
         if math.sqrt((self.player.center_x - self.objective.center_x)**2 + (self.player.center_y - self.objective.center_y)**2) < 100:
             if len(LEVEL_TEMPLATES) - 1 <= self.level:
                 victory = VictoryView()
+                self.music.stop(self.music_player)
+                arcade.play_sound(GAME_VICTORY)
                 self.window.show_view(victory)
             else:
                 arcade.play_sound(WIN_LEVEL)
@@ -259,7 +261,8 @@ class GameView(arcade.View):
         self.counter += 1
         if self.counter == 60:
             self.counter = 0
-        self.player.animate(self.physics_engine.in_free_fall, self.physics_engine.velocity[1], self.physics_engine.velocity[0], self.counter)
+        self.player.animate(self.physics_engine.in_free_fall,
+                            self.physics_engine.velocity[1], self.physics_engine.velocity[0], self.counter)
 
     def playSong(self):
         """ Play background music """
@@ -281,7 +284,7 @@ class GameView(arcade.View):
                     pass
                 elif pix[x, y] == (0, 0, 0, 255):
                     # black, place a barrier
-                    self.barrier = arcade.Sprite("Images/platform.png")
+                    self.barrier = arcade.Sprite(f"{PATH}Images/platform.png")
                     self.barrier.bottom = y * 75
                     self.barrier.left = x * 75
                     self.barrier_list.append(self.barrier)
@@ -289,7 +292,7 @@ class GameView(arcade.View):
                 elif pix[x, y] == (255, 0, 0, 255):
                     # red, place a npc
                     self.npc = arcade.Sprite(
-                        ':resources:images/animated_characters/robot/robot_idle.png')
+                        ':resources:images/animated_characters/robot/robot_idle.png', scale=1.65)
                     self.npc.bottom = y * 75
                     self.npc.left = x * 75
                     self.npc_list.append(self.npc)
@@ -303,7 +306,7 @@ class GameView(arcade.View):
                     found_player = True
                 elif pix[x, y] == (0, 255, 0, 255):
                     # green, place the objective
-                    self.objective = arcade.Sprite("Images/Game_Goal.png", scale=0.3)
+                    self.objective = arcade.Sprite(f"{PATH}Images/Game_Goal.png", scale=0.3)
                     self.objective.bottom = y * 75
                     self.objective.left = x * 75
                     self.objective_list.append(self.objective)
@@ -355,7 +358,7 @@ class VictoryView(arcade.View):
 
     def __init__(self):
         super().__init__()
-        self.texture = arcade.load_texture("Images/victory.png")
+        self.texture = arcade.load_texture(f"{PATH}Images/Game_Victory.png")
 
     def on_show(self):
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
@@ -373,7 +376,7 @@ class StartMenuView(arcade.View):
 
     def __init__(self):
         super().__init__()
-        self.texture = arcade.load_texture("Images/title.png")
+        self.texture = arcade.load_texture(f"{PATH}Images/Game_Title.png")
         self.mouse_pressed = False
 
     def on_show(self):
@@ -388,7 +391,7 @@ class StartMenuView(arcade.View):
             game_view.setup()
             self.window.show_view(game_view)
         else:
-            self.texture = arcade.load_texture("Images/tutorial.png")
+            self.texture = arcade.load_texture(f"{PATH}Images/Game_Tutorial.png")
             self.mouse_pressed = True
 
     def on_key_release(self, key, mods):

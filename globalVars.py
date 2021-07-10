@@ -6,7 +6,7 @@ SCREEN_TITLE = "Adventure in Multiplication Land (TM)"
 GRAVITY = -1
 FRICTION = 1.1
 DRAG = 1.023
-PLAYER_JUMP_SPEED = 23
+PLAYER_JUMP_SPEED = 21
 PLAYER_MOVEMENT_SPEED = 0.8
 PLAYER_MAX_MOVEMENT_SPEED = 12
 PLAYER_FACE_LEFT = 1
@@ -15,11 +15,14 @@ PLAYER_UPDATE = 0.8
 PLAYER_SCALE = 1
 BACKGROUND_WIDTH = 2000
 
-LEVEL_TEMPLATES = ['Images/map0.png', 'Images/map1.png', 'Images/map2.png', 'Images/map3.png']
+PATH = "C:/Users/jmp10/Documents/GitHub/Team_2_Project/"
+
+LEVEL_TEMPLATES = [f'{PATH}Images/map0.png', f'{PATH}Images/map1.png',
+                   f'{PATH}Images/map2.png', f'{PATH}Images/map3.png']
 
 SOUND_ERROR = arcade.load_sound(":resources:sounds/error5.wav")
 SOUND_CORRECT = arcade.load_sound(":resources:sounds/coin1.wav")
 SOUND_NO_LIVES = arcade.load_sound(":resources:sounds/gameover2.wav")
 WIN_LEVEL = arcade.load_sound(":resources:sounds/secret4.wav")
-GAME_VICTORY = arcade.load_sound(":resources:sounds/upgrade5.wav")
+GAME_VICTORY = arcade.load_sound(f'{PATH}Audio/Victory_Fanfare.mp3')
 MUSIC_VOLUME = 0.5
