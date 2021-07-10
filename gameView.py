@@ -1,3 +1,4 @@
+from typing import Counter
 from diolouge import Diolouge
 import arcade
 import PIL
@@ -23,6 +24,7 @@ class GameView(arcade.View):
         """
         self.level = -1
         self.questions_wrong = 0
+        self.counter = 0
         self.in_diolouge = False
         self.near_npc = None
         self.diolouge = None
@@ -254,7 +256,10 @@ class GameView(arcade.View):
                 self.setup()
 
         self.physics_engine.update(self.barrier_list)
-        self.player.animate()
+        self.counter += 1
+        if self.counter == 60:
+            self.counter = 0
+        self.player.animate(self.physics_engine.in_free_fall, self.physics_engine.velocity[1], self.physics_engine.velocity[0], self.counter)
 
     def playSong(self):
         """ Play background music """

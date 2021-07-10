@@ -35,26 +35,27 @@ class Player(arcade.Sprite):
         self.texture = self.idle[0]
         self.set_hit_box(self.texture.hit_box_points)
 
-    def animate(self, delta_time: float = 1/60):
-        if self.change_x < 0 and self.direction == PLAYER_FACE_RIGHT:
-            self.direction = PLAYER_FACE_LEFT
-        elif self.change_x > 0 and self.direction == PLAYER_FACE_LEFT:
-            self.direction = PLAYER_FACE_RIGHT
+    def animate(self, in_free_fall, y_velocity, x_velocity, delta_time):
+        if in_free_fall:
+            if y_velocity >= 0:
+                self.texture = self.jump[self.direction]
+                return
+            else:
+                self.texture = self.fall[self.direction]
+                return
 
-        if self.change_y > 0:
-            self.texture = self.jump[self.direction]
-            return
-        elif self.change_y < 0:
-            self.texture = self.fall[self.direction]
-            return
-
-        if self.change_x == 0 and self.change_y == 0:
-            self.texture = self.idle[self.direction]
-            return
-
-        self.current_texture += 1
-        if self.current_texture > 7 * PLAYER_UPDATE:
-            self.current_texture = 0
-        frame = int(self.current_texture // PLAYER_UPDATE)
-        direction = self.direction
-        self.texture = self.walk[frame][direction]
+        else:
+            if x_velocity < -2:
+                self.direction = PLAYER_FACE_LEFT
+            elif x_velocity > 2:
+                self.direction = PLAYER_FACE_RIGHT
+            else:
+                self.texture = self.idle[self.direction]
+                return
+        if delta_time % 4 == 0:
+            self.current_texture += 1
+            if self.current_texture > 7 * PLAYER_UPDATE:
+                self.current_texture = 0
+            frame = int(self.current_texture // PLAYER_UPDATE)
+            direction = self.direction
+            self.texture = self.walk[frame][direction]
