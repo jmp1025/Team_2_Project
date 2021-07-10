@@ -250,6 +250,8 @@ class GameView(arcade.View):
         if math.sqrt((self.player.center_x - self.objective.center_x)**2 + (self.player.center_y - self.objective.center_y)**2) < 100:
             if len(LEVEL_TEMPLATES) - 1 <= self.level:
                 victory = VictoryView()
+                self.music.stop(self.music_player)
+                arcade.play_sound(GAME_VICTORY)
                 self.window.show_view(victory)
             else:
                 arcade.play_sound(WIN_LEVEL)
@@ -290,7 +292,7 @@ class GameView(arcade.View):
                 elif pix[x, y] == (255, 0, 0, 255):
                     # red, place a npc
                     self.npc = arcade.Sprite(
-                        ':resources:images/animated_characters/robot/robot_idle.png')
+                        ':resources:images/animated_characters/robot/robot_idle.png', scale=1.7)
                     self.npc.bottom = y * 75
                     self.npc.left = x * 75
                     self.npc_list.append(self.npc)
