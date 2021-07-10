@@ -29,8 +29,6 @@ SOUND_CORRECT = arcade.load_sound(":resources:sounds/coin1.wav")
 SOUND_NO_LIVES = arcade.load_sound(":resources:sounds/gameover2.wav")
 WIN_LEVEL = arcade.load_sound(":resources:sounds/secret4.wav")
 
-GAME_VICTORY = arcade.load_sound(":resources:sounds/upgrade5.wav")
-
 GAME_VICTORY = arcade.load_sound('Audio/Victory_Fanfare.mp3')
 
 MUSIC_VOLUME = 0.5
