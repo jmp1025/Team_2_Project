@@ -11,10 +11,6 @@ from physicsEngine import PhysicsEngine
 from background import Background
 from player import Player
 
-# TODO:
-# NPC diolouge: press E to interact, 3 multiple choice questions, if failed lose a life (3 lives total) and exit diolouge
-# questions are based on the value of self.level.
-
 
 class GameView(arcade.View):
     def __init__(self):
