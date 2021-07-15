@@ -266,7 +266,7 @@ class GameView(arcade.View):
         # Removed this because somehow the music player deletes itself when the music stops
         # so trying to pass the music player to the .stop method created a fatal error causing
         # the game to crash. It seems to work correctly after commenting this out.
-        #if self.music:
+        # if self.music:
         #    self.music.stop(self.music_player)
 
         self.music = arcade.Sound(":resources:music/funkyrobot.mp3", streaming=True)

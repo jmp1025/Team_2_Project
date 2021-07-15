@@ -25,6 +25,6 @@
 
 # Future Work
 {Make a list of things that you need to fix, improve, and add in the future.}
-* Item 1 - Jesse
+* Include a point accrual system that posts to a scoreboard/title page every time the game is cleared.
 * Item 2 - Isaac
 * Item 3 - Roberto
