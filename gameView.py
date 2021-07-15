@@ -262,8 +262,13 @@ class GameView(arcade.View):
 
     def playSong(self):
         """ Play background music """
-        if self.music:
-            self.music.stop(self.music_player)
+
+        # Removed this because somehow the music player deletes itself when the music stops
+        # so trying to pass the music player to the .stop method created a fatal error causing
+        # the game to crash. It seems to work correctly after commenting this out.
+        #if self.music:
+        #    self.music.stop(self.music_player)
+
         self.music = arcade.Sound(":resources:music/funkyrobot.mp3", streaming=True)
         self.music_player = self.music.play(MUSIC_VOLUME)
         time.sleep(0.03)
@@ -288,7 +293,7 @@ class GameView(arcade.View):
                 elif pix[x, y] == (255, 0, 0, 255):
                     # red, place a npc
                     self.npc = arcade.Sprite(
-                        ':resources:images/animated_characters/robot/robot_idle.png', scale=1.7)
+                        ':resources:images/animated_characters/robot/robot_idle.png', scale=1.8)
                     self.npc.bottom = y * 75
                     self.npc.left = x * 75
                     self.npc_list.append(self.npc)
@@ -357,7 +362,7 @@ class VictoryView(arcade.View):
         self.texture = arcade.load_texture("Images/Game_Victory.png")
 
     def on_show(self):
-        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+        arcade.set_background_color(arcade.csscolor.SADDLE_BROWN)
 
     def on_draw(self):
         self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -376,7 +381,7 @@ class StartMenuView(arcade.View):
         self.mouse_pressed = False
 
     def on_show(self):
-        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+        arcade.set_background_color(arcade.csscolor.SADDLE_BROWN)
 
     def on_draw(self):
         self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT)

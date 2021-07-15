@@ -1,7 +1,7 @@
 import arcade
 
 SCREEN_WIDTH = 1300
-SCREEN_HEIGHT = 750
+SCREEN_HEIGHT = 780
 SCREEN_TITLE = "Adventure in Multiplication Land (TM)"
 GRAVITY = -1
 FRICTION = 1.1
@@ -15,8 +15,17 @@ PLAYER_UPDATE = 0.8
 PLAYER_SCALE = 1
 BACKGROUND_WIDTH = 2000
 # PATH = "C:/Users/jmp10/Documents/GitHub/Team_2_Project/"
-LEVEL_TEMPLATES = ['Images/map0.png', 'Images/map1.png',
-                   'Images/map2.png', 'Images/map3.png']
+LEVEL_TEMPLATES =  ['Images/map0.png', 
+                    'Images/map1.png', 
+                    'Images/map2.png', 
+                    'Images/map3.png', 
+                    'Images/map4.png', 
+                    'Images/map5.png', 
+                    'Images/map6.png', 
+                    'Images/map7.png', 
+                    'Images/map8.png', 
+                    'Images/map9.png',
+                    ]
 SOUND_ERROR = arcade.load_sound(":resources:sounds/error5.wav")
 SOUND_CORRECT = arcade.load_sound(":resources:sounds/coin1.wav")
 SOUND_NO_LIVES = arcade.load_sound(":resources:sounds/gameover2.wav")

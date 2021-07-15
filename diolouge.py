@@ -2,6 +2,8 @@ import arcade
 import random
 from globalVars import *
 
+PRIMES = [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79]
+
 
 class Diolouge:
     def __init__(self, level):
@@ -16,6 +18,10 @@ class Diolouge:
             self.multiple_choice[self.correct_index] = self.answer
             for i in range(4):
                 if self.multiple_choice[i] == -1:
-                    self.multiple_choice[i] = random.randint(0, 99)
+                    prime = True
+                    while prime:
+                        self.multiple_choice[i] = random.randint(0, 81)
+                        if not self.multiple_choice[i] in PRIMES:
+                            prime = False
             if len(set(self.multiple_choice)) == len(self.multiple_choice):
                 valid = True
